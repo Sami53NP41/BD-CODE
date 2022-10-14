@@ -1,0 +1,80 @@
+CREATE DATABASE  SamitoDom2
+GO
+USE SamitoDom
+GO
+CREATE TABLE Speciality(
+Id INT PRIMARY KEY IDENTITY,
+[Name] VARCHAR(32) NOT NULL UNIQUE,
+[Description] VARCHAR(1024),
+[GraduatesTitle] VARCHAR(32) NOT NULL UNIQUE,
+[StartGrade] INT CONSTRAINT StartGrade_range CHECK(StartGrade BETWEEN 1 AND 12),
+[EndGrade] INT CONSTRAINT EndGrade_range CHECK(EndGrade BETWEEN 1 AND 12)
+)
+GO
+CREATE TABLE Classes(
+Id INT PRIMARY KEY IDENTITY,
+[Grade] INT CONSTRAINT Grade_range CHECK(Grade BETWEEN 1 AND 12),
+[GradeLetter] VARCHAR(1) NOT NULL,
+[SpecialityID]INT CONSTRAINT FK_Classes_Speciality
+FOREIGN KEY REFERENCES Speciality(Id)
+ )
+ GO
+CREATE TABLE Teachers(
+Id UNIQUEIDENTIFIER PRIMARY KEY default NEWID(),
+[FirstName] VARCHAR(16) NOT NULL,  
+[LastName] VARCHAR(16) NOT NULL,
+[Gender] BIT NOT NULL,
+[Email]  NVARCHAR(32) NOT NULL UNIQUE,
+[Subjects] VARCHAR(64),
+[ManageClassID]  INT CONSTRAINT FK_Teacher_Classes
+FOREIGN KEY REFERENCES Classes(Id)
+ )
+ GO
+CREATE TABLE Students(
+Id UNIQUEIDENTIFIER PRIMARY KEY default NEWID(),
+[FirstName] VARCHAR(16) NOT NULL,
+[SureName] VARCHAR(16) NOT NULL,
+[LastName] VARCHAR(16) NOT NULL,
+[GSM] VARCHAR(16) NOT NULL,
+[Email] NVARCHAR(32) NOT NULL UNIQUE,
+[Address] VARCHAR(64) NOT NULL,
+[Age] INT CONSTRAINT Age_range CHECK(Age BETWEEN 8 AND 20),
+[Gender] BIT NOT NULL,
+[ClassID] INT CONSTRAINT FK_Students_Classes
+FOREIGN KEY REFERENCES Classes(Id)
+)
+GO
+ INSERT INTO Speciality(Name,Description,GraduatesTitle,StartGrade,EndGrade) VALUES
+ ('Zimno Savety', 'arhitekt po sneologia i predotvratqvane na zaledqvaniq','Injiner po snegozadyrjane',8, 12),
+ ('Neznainologiq', 'Uchitel/profesor po neznainologiq pomaga na uchitelskiq sustav ili zamestva otsustvasht takyv','Neznainolog', 5, 12),
+ ('Kasierstvo','pomaga na ikonomikata','Kasier',1,12)
+ 
+ INSERT INTO Classes(Grade,GradeLetter,SpecialityID) VALUES
+ (4,'C',2),
+(11,'A',1)
+
+
+ 
+INSERT INTO Teachers(FirstName,LastName,Gender,Email,Subjects,ManageClassID) VALUES
+('Vankata','Arhitektov',1,'vankata@yahoo.com','zaledqvaniq',1),
+('Radeva','Ivanova',0,'radevaisgod@gmail.com','bezpisanie',2),
+('Marcheto','Siikova',0,'marsik@abv.bg','presmqtania',null)
+
+INSERT INTO Students(FirstName,SureName,LastName,GSM,Email,Address,Age,Gender,ClassID) VALUES
+('Ivan','Markov','Valentinov','08954984','markoVanko@gmal.com','ul.Sofiiska №4',17,1,2),
+('Petur','Stefanov','Martinov','08955569','PSM@gmal.com','ul.Makedonska №8',15,1,2),
+('Asen','Petrov','Markov','08868796','NaskoMazko@gmal.com','ul.Stalin №1',16,1,2),
+('Asparuh','Krumov','Omurtagov','08721345','Shatrata@yahoo.com','ul.Lenin №2',18,1,2),
+('Kostadin','Borisov','Leninov','08965487','kopeikata@abv.bg','ul.Chervena Armiq №23',15,1,1),
+('Kiara','Richardsun','Zahir','66677769','idkNow@gmal.com','ul.Varnenska №56',19,0,2),
+('Nikol','Maikulova','Lii','08954698','NikolOF@yahoo.com','ul.Varnenska №54',15,0,1),
+('Nik','Ivanov','Fury','08941752','Niko@gmal.com','ul.Sofiiska №7',14,1,1),
+('Ada','Nikova','Makronova','08869341','AdaNik@gmal.com','ul.Sofiiska №56',17,0,2),
+('Krasi','Markov','Radkov','09848926','KrasiRad@gmal.com','ul.Makedonska №9',16,1,1)
+ 
+SELECT *FROM Students
+ SELECT *FROM Speciality
+ SELECT *FROM Teachers
+ SELECT *FROM Classes
+
+ DELETE FROM Classes
